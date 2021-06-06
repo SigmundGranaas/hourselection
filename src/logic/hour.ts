@@ -17,6 +17,9 @@ export class Hour implements IHour {
     this.between = between;
     this.position = position;
   }
+  getTime(): number {
+    return this.time;
+  }
 
   getStatus(): Status {
     return this.status;
@@ -41,4 +44,5 @@ export class Hour implements IHour {
 export interface IHour {
   setStatus(newStatus: Status): void;
   getStatus(): Status;
+  getTime(): number;
 }

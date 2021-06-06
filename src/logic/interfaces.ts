@@ -1,18 +1,20 @@
 import { IHour } from "./hour";
 
 interface Iselectable {
-  select(selectionType: SelectionType, selection?: HourSelection): void;
+  select(selectionType: SelectionType, selection?: Selection): void;
 }
 
 export enum SelectionType {
   FirstSelection = "FIRST_SELECTION",
   SecondSelection = "SECOND_SELECTION",
+  Selected = "SEKECTED",
   Clear = "CLEAR",
   Disable = "DISABLE",
 }
 
-type HourSelection = {
-  selection: Date;
+type Selection = {
+  firstSelection: Date | undefined;
+  secondSelection: Date | undefined;
 };
 
 interface IWeek {
@@ -59,7 +61,7 @@ export type {
   IHour,
   IDay,
   IWeek,
-  HourSelection,
+  Selection,
   Iselectable,
   IDayFactory,
 };

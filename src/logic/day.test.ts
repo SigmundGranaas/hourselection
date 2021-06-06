@@ -18,7 +18,7 @@ describe("Day class creation", () => {
     expect(hours.length).toBeGreaterThanOrEqual(24);
 
     const errortest = () => {
-      return new Day(hours, new Date());
+      return new Day(hours, new Date(), 0);
     };
 
     expect(errortest).toThrow(Error);
@@ -28,7 +28,7 @@ describe("Day class creation", () => {
     let hours: Hour[] = [];
 
     const errortest = () => {
-      return new Day(hours, new Date());
+      return new Day(hours, new Date(), 0);
     };
     expect(hours.length).toBe(0);
     expect(errortest).toThrow(Error);
@@ -54,13 +54,29 @@ describe("Day class selection handling", () => {
     expect(hours === day.getHours()).toBe(false);
   });
   it("Will execute first selection", () => {
-    day.select(SelectionType.FirstSelection, { selection: new Date() });
+    const testDate = new Date();
+    testDate.setTime(12);
+    day.select(SelectionType.FirstSelection, {
+      firstSelection: testDate,
+      secondSelection: undefined,
+    });
+    expect(day.getHours()[11].getStatus()).toBe(Status.SELECTED);
   });
   it("Will execute second selection", () => {
-    day.select(SelectionType.SecondSelection, { selection: new Date() });
+    day.select(SelectionType.SecondSelection, {
+      firstSelection: new Date(),
+      secondSelection: new Date(),
+    });
   });
   it("Will redo second selection", () => {
-    day.select(SelectionType.SecondSelection, { selection: new Date() });
+    day.select(SelectionType.SecondSelection, {
+      firstSelection: new Date(),
+      secondSelection: new Date(),
+    });
+    day.select(SelectionType.SecondSelection, {
+      firstSelection: new Date(),
+      secondSelection: new Date(),
+    });
   });
 
   it("Will clear when selected first selection again", () => {
@@ -75,5 +91,21 @@ describe("Day factory", () => {
   it("Creates default Day", () => {
     day = DayFactory.createDefaultDay();
     expect(day.getHours().length).toEqual(24);
+  });
+  it("Creates day with set amount of hours", () => {
+    day = DayFactory.createDay(12, 12);
+    expect(day.getHours().length).toEqual(12);
+    expect(day.getHours()[11].getTime()).toBe(23);
+  });
+  it("Creates selected hours with set amount of hours", () => {
+    let hours = DayFactory.createSelectedHours(12, 12);
+    expect(hours.length).toEqual(12);
+    expect(hours[11].getTime()).toBe(23);
+    expect(hours[0].getTime()).toBe(12);
+  });
+  it("Creates default selected hours with set amount of hours", () => {
+    let hours = DayFactory.createSelectedHours();
+    expect(hours.length).toEqual(24);
+    expect(hours[23].getTime()).toBe(23);
   });
 });
